@@ -1,0 +1,5 @@
+course: devops-entrega-automacao
+lesson: iac-terraform-ansible
+category: infraestrutura-como-codigo
+title: "IaC com Terraform e Ansible"
+secrets_required: false

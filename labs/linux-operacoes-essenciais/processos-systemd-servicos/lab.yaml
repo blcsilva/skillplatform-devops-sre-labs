@@ -1,0 +1,5 @@
+course: linux-operacoes-essenciais
+lesson: processos-systemd-servicos
+category: sistemas-operacionais
+title: "Processos, systemd e servicos"
+secrets_required: false

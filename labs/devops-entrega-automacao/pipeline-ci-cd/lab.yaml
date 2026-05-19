@@ -1,0 +1,5 @@
+course: devops-entrega-automacao
+lesson: pipeline-ci-cd
+category: entrega-continua
+title: "Pipeline CI/CD com qualidade e rollback"
+secrets_required: false

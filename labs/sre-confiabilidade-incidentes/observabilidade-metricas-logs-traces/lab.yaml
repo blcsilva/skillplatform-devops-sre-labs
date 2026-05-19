@@ -1,0 +1,5 @@
+course: sre-confiabilidade-incidentes
+lesson: observabilidade-metricas-logs-traces
+category: observabilidade
+title: "Metricas, logs e traces"
+secrets_required: false

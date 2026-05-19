@@ -1,0 +1,5 @@
+course: sre-confiabilidade-incidentes
+lesson: sli-slo-error-budget
+category: confiabilidade-sre
+title: "SLI, SLO e erro orcamentado"
+secrets_required: false

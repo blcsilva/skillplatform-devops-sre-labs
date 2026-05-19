@@ -1,0 +1,9 @@
+- name: Lab playbook sem secrets
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: Criar evidencia local
+      ansible.builtin.copy:
+        dest: /workspace/evidencias/ansible.txt
+        content: "playbook executado em laboratorio\n"
