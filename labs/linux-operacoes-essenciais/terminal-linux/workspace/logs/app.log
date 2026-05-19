@@ -1,5 +1,0 @@
-2026-05-19T10:01:12Z INFO request_id=aa-101 route=/api/login status=200 latency_ms=82 client_ip=10.10.1.21
-2026-05-19T10:04:40Z WARN request_id=aa-102 route=/api/login status=504 latency_ms=3012 client_ip=10.10.1.22
-2026-05-19T10:07:03Z ERROR request_id=aa-103 route=/api/login status=500 latency_ms=2890 client_ip=10.10.1.23 message="auth dependency timeout"
-2026-05-19T10:12:55Z ERROR request_id=aa-104 route=/api/login status=500 latency_ms=3201 client_ip=10.10.1.24 message="auth dependency timeout"
-2026-05-19T10:18:42Z INFO request_id=aa-105 route=/api/catalog status=200 latency_ms=91 client_ip=10.10.1.25

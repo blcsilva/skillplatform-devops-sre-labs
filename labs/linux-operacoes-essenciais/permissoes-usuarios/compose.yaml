@@ -1,6 +1,0 @@
-services:
-  linux:
-    build: .
-    volumes:
-      - ./workspace:/workspace
-    command: sleep infinity

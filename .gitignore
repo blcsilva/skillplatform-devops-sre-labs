@@ -1,7 +1,0 @@
-**/workspace/evidencias/*
-!**/workspace/evidencias/.gitkeep
-**/.terraform/
-**/terraform.tfstate*
-.env
-*.key
-*.pem

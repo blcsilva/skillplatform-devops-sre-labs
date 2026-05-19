@@ -1,8 +1,0 @@
-services:
-  iac:
-    build: .
-    volumes:
-      - ./workspace:/workspace
-      - ./terraform:/workspace/terraform
-      - ./ansible:/workspace/ansible
-    command: sleep infinity
