@@ -60,10 +60,10 @@ Comandos que devem aparecer na resolucao:
         find . -type f -name "*.log*" -mtime -1 -print
         head -n 20 app.log
         tail -n 50 app.log
-        grep -Ein "error|warn|timeout|failed| 5[0-9]{2} " app.log
+        grep -Ein -e error -e warn -e timeout -e failed -e " 5[0-9]{2} " app.log
         awk '{print $1, $3, $4, $5}' app.log
         sed -E 's/[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+/x.x.x.x/g' app.log > ../evidencias/app-anon.log
-        find . -type f -name "*.log*" -print0 | xargs -0 grep -Ein "error|timeout|failed" > ../evidencias/erros-$(date +%Y%m%d).txt
+        find . -type f -name "*.log*" -print0 | xargs -0 grep -Ein -e error -e timeout -e failed > ../evidencias/erros-$(date +%Y%m%d).txt
         ```
 
 
