@@ -1,0 +1,14 @@
+services:
+  app:
+    image: nginx:1.27-alpine
+    volumes:
+      - ./app/html:/usr/share/nginx/html:ro
+      - ./app/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    ports:
+      - "8080:80"
+  lab:
+    build: .
+    volumes:
+      - ./workspace:/workspace
+      - ./k8s:/workspace/k8s:ro
+    command: sleep infinity

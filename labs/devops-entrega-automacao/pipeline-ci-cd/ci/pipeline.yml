@@ -1,0 +1,10 @@
+stages:
+  - lint
+  - test
+  - build
+  - deploy
+
+quality_gate:
+  stage: test
+  script:
+    - echo "Executar testes e publicar evidencias"

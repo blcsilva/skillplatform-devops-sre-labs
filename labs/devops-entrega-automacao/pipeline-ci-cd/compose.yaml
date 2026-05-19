@@ -1,0 +1,7 @@
+services:
+  runner:
+    build: .
+    volumes:
+      - ./workspace:/workspace
+      - ./ci:/workspace/ci:ro
+    command: sleep infinity

@@ -1,0 +1,5 @@
+course: devops-entrega-automacao
+lesson: gitops-argocd-flux
+category: entrega-continua
+title: "GitOps com ArgoCD ou FluxCD"
+secrets_required: false
