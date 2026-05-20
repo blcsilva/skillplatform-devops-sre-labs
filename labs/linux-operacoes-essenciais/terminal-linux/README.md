@@ -92,13 +92,7 @@ Criterio de conclusao: explicar quando usar pipe, redirect e subshell em uma rot
     ```bash
     ./scripts/validate.sh
     ```
-
-    No PowerShell:
-
-    ```powershell
-    .\scriptsalidate.ps1
-    ```
-
+    
     ## Cuidados
 
     - Nao use senhas reais.
