@@ -1,0 +1,18 @@
+{
+  "name": "BeginDev Labs",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-azuretools.vscode-docker",
+        "redhat.vscode-yaml",
+        "timonwong.shellcheck"
+      ]
+    }
+  },
+  "postCreateCommand": "bash -lc 'echo BeginDev Labs pronto. Acesse labs/<curso>/<aula> e siga o README do laboratorio.'",
+  "remoteUser": "vscode"
+}

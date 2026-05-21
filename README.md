@@ -15,6 +15,17 @@ docker compose ps
 docker compose down -v
 ```
 
+## Sandboxes suportadas
+
+Os laboratorios podem ser executados localmente com Docker ou abertos em ambientes externos usando a conta do proprio aluno.
+
+- Docker local: clone o repositorio, entre na pasta do laboratorio e execute os comandos do README da aula.
+- DevPod: execute `devpod up https://github.com/blcsilva/skillplatform-devops-sre-labs` e acesse a pasta do laboratorio no workspace.
+- GitHub Codespaces: abra o repositorio no Codespaces, aguarde o devcontainer ser criado e execute o laboratorio pela pasta correspondente.
+- Gitpod: abra o repositorio via Gitpod e siga o README do laboratorio pelo terminal do workspace.
+
+Os ambientes externos podem consumir cotas pessoais ou organizacionais. A BeginDev fornece artefatos e roteiro; a execucao fica sob responsabilidade da conta usada pelo aluno.
+
 ## Padrao dos laboratorios
 
 - `README.md`: roteiro do aluno, objetivos, entrega esperada e referencias oficiais.
