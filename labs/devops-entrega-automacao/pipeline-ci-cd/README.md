@@ -1,90 +1,111 @@
 # Pipeline CI/CD com qualidade e rollback
 
-    Curso: DevOps: automacao, entrega e plataforma
+Curso: **DevOps: automacao, entrega e plataforma**
+Categoria: **Entrega continua**
 
-    ## Objetivo
+## Proposta de ensino
 
-    Objetivo: estruturar uma esteira confiavel.
-Conteudo: stages, testes, artefatos, variaveis, secrets, gates, deploy e rollback.
-Pratica: desenhar um pipeline para aplicacao web com build, teste e deploy.
-Criterio de conclusao: identificar pontos de falha e controles de rollback.
+Construir uma visao pratica de versionamento, pipeline, qualidade, entrega controlada e rollback.
 
-    ## Imagem e recursos
+Ao concluir, o aluno deve conseguir explicar o que verificou, quais evidencias coletou e qual acao operacional seria segura em um ambiente real.
 
-    Este laboratorio usa Docker Compose e imagens publicas sem senhas ou secrets.
+## Conceitos trabalhados
 
-    - Base Linux: `ubuntu:24.04`
-    - Servicos auxiliares conforme o topico: Nginx, Python demo app, Prometheus ou arquivos de IaC.
-    - Todos os dados sao ficticios e servem apenas para pratica.
+- Git
+- branch
+- tag
+- stage
+- artefato
+- deploy
+- rollback
+- evidencia de release
 
-    ## Case
+## Ambiente do laboratorio
 
-    Case: aplicacao pratica de "Pipeline CI/CD com qualidade e rollback".
+- Execucao local com Docker Compose.
+- Servicos principais: `runner`.
+- Dados e logs sao ficticios; nao use credenciais reais.
+- Evidencias devem ser salvas em `workspace/evidencias/` ou `/workspace/evidencias/`, conforme o container usado.
 
-Contexto: voce recebeu uma demanda de operacao em ambiente de homologacao. O objetivo nao e apenas explicar o conceito, mas executar uma sequencia segura de analise, registrar evidencias e propor uma acao tecnicamente defensavel.
+Artefatos disponiveis:
 
-Objetivo pratico: estruturar uma esteira confiavel.
+- `Dockerfile`
+- `compose.yaml`
+- `lab.yaml`
+- `ci/`
+- `workspace/`
+- `scripts/`
 
-Ferramentas/conceitos que devem aparecer na resolucao:
-- tag: use no case para coletar evidencia, aplicar a pratica ou validar resultado.
-- stages: use no case para coletar evidencia, aplicar a pratica ou validar resultado.
-- secrets: use no case para coletar evidencia, aplicar a pratica ou validar resultado.
-- deploy: use no case para coletar evidencia, aplicar a pratica ou validar resultado.
-- rollback: use no case para coletar evidencia, aplicar a pratica ou validar resultado.
+## Como executar
 
-    ## Como executar
+Requisitos locais:
 
-    Requisitos locais:
+- Docker Engine ou Docker Desktop.
+- Docker Compose v2.
+- Git para clonar o repositorio e registrar alteracoes locais quando necessario.
 
-    - Docker
-    - Docker Compose
-    - Git, quando o laboratorio envolver versionamento
+Passos iniciais:
 
-    Passos:
+```bash
+git clone https://github.com/blcsilva/skillplatform-devops-sre-labs.git
+cd skillplatform-devops-sre-labs/labs/devops-entrega-automacao/pipeline-ci-cd
+docker compose up -d --build
+docker compose ps
+```
 
-            ```bash
-        docker compose up -d --build
-        docker compose exec runner bash
-        git init demo-repo
-        cd demo-repo
-        git config user.email aluno@example.local
-        git config user.name Aluno
-        echo "versao inicial" > app.txt
-        git add app.txt && git commit -m "base da aplicacao"
-        cp /workspace/ci/pipeline.yml ./pipeline.yml
-        git add pipeline.yml && git commit -m "adiciona pipeline"
-        git log --oneline
-        ```
+## Roteiro pratico
+
+Execute o roteiro abaixo e registre a saida relevante. Ajuste comandos somente quando o sistema operacional do host exigir.
+
+```bash
+docker compose up -d --build
+docker compose exec runner bash
+cd /workspace
+mkdir -p evidencias
+git --version | tee evidencias/git-version.txt
+find . -maxdepth 3 -type f | sort | tee evidencias/arquivos.txt
+```
+
+Durante a pratica:
+
+- Crie uma linha do tempo de mudancas com commits, tags ou arquivos de pipeline.
+- Identifique onde ficam build, teste, validacao, deploy e rollback.
+- Explique como proteger secrets e variaveis sensiveis sem grava-las no repositorio.
+
+## Entrega esperada
+
+- historico ou desenho do fluxo
+- evidencia de validacao
+- plano de rollback simples
+- Uma explicacao curta, em linguagem operacional, respondendo: o que aconteceu, como foi comprovado e qual seria a proxima acao segura.
+
+## Validacao
+
+No Linux, macOS, Git Bash ou WSL:
+
+```bash
+./scripts/validate.sh
+```
 
 
-    ## Entrega esperada
+Se a validacao falhar, leia a mensagem de erro, revise os arquivos em `workspace/evidencias/` e repita apenas a etapa necessaria.
 
-    Entrega esperada:
+## Referencias oficiais
 
-1. Sequencia de comandos, consultas ou configuracoes usadas.
-2. Evidencias antes/depois.
-3. Explicacao do motivo de cada acao.
-4. Uma decisao segura para seguir, reverter ou escalar.
+- [Git documentation](https://git-scm.com/docs)
+- [GitHub Actions documentation](https://docs.github.com/actions)
+- [GitLab CI/CD documentation](https://docs.gitlab.com/ci/)
+- [Argo CD documentation](https://argo-cd.readthedocs.io/en/stable/)
+- [Flux documentation](https://fluxcd.io/flux/)
 
-Criterio de conclusao: identificar pontos de falha e controles de rollback.
+## Limpeza do ambiente
 
-    ## Validacao
+```bash
+docker compose down -v
+```
 
-    Execute no Linux, macOS, Git Bash ou WSL:
+## Cuidados
 
-    ```bash
-    ./scripts/validate.sh
-    ```
-
-    No PowerShell:
-
-    ```powershell
-    .\scriptsalidate.ps1
-    ```
-
-    ## Cuidados
-
-    - Nao use senhas reais.
-    - Nao coloque tokens pessoais nos arquivos.
-    - Use apenas dados ficticios do laboratorio.
-    - Remova containers ao terminar: `docker compose down -v`.
+- Nao use senhas, tokens ou chaves reais.
+- Nao publique arquivos `.env`, `.pem`, `.key` ou credenciais pessoais.
+- Trate este laboratorio como simulacao educacional, nao como ambiente de producao.

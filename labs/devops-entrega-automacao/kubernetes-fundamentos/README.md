@@ -1,88 +1,109 @@
 # Kubernetes para DevOps
 
-    Curso: DevOps: automacao, entrega e plataforma
+Curso: **DevOps: automacao, entrega e plataforma**
+Categoria: **Containers e plataformas**
 
-    ## Objetivo
+## Proposta de ensino
 
-    Objetivo: operar workloads basicos em cluster Kubernetes.
-Conteudo: pods, deployments, services, configmaps, secrets, probes, ingress e namespaces.
-Pratica: publicar uma aplicacao com health checks e configuracao externa.
-Criterio de conclusao: diagnosticar CrashLoopBackOff, erro de service e falha de probe.
+Entender imagens, containers, runtime e manifestos Kubernetes como base de operacao de plataformas modernas.
 
-    ## Imagem e recursos
+Ao concluir, o aluno deve conseguir explicar o que verificou, quais evidencias coletou e qual acao operacional seria segura em um ambiente real.
 
-    Este laboratorio usa Docker Compose e imagens publicas sem senhas ou secrets.
+## Conceitos trabalhados
 
-    - Base Linux: `ubuntu:24.04`
-    - Servicos auxiliares conforme o topico: Nginx, Python demo app, Prometheus ou arquivos de IaC.
-    - Todos os dados sao ficticios e servem apenas para pratica.
+- Dockerfile
+- image build
+- container runtime
+- compose
+- deployment
+- service
+- health check
 
-    ## Case
+## Ambiente do laboratorio
 
-    Case: aplicacao pratica de "Kubernetes para DevOps".
+- Execucao local com Docker Compose.
+- Servicos principais: `app`, `lab`.
+- Dados e logs sao ficticios; nao use credenciais reais.
+- Evidencias devem ser salvas em `workspace/evidencias/` ou `/workspace/evidencias/`, conforme o container usado.
 
-Contexto: voce recebeu uma demanda de operacao em ambiente de homologacao. O objetivo nao e apenas explicar o conceito, mas executar uma sequencia segura de analise, registrar evidencias e propor uma acao tecnicamente defensavel.
+Artefatos disponiveis:
 
-Objetivo pratico: operar workloads basicos em cluster Kubernetes.
+- `Dockerfile`
+- `compose.yaml`
+- `lab.yaml`
+- `app/`
+- `k8s/`
+- `workspace/`
+- `scripts/`
 
-Ferramentas/conceitos que devem aparecer na resolucao:
-- ps: use no case para coletar evidencia, aplicar a pratica ou validar resultado.
-- ss: use no case para coletar evidencia, aplicar a pratica ou validar resultado.
-- secrets: use no case para coletar evidencia, aplicar a pratica ou validar resultado.
-- deploy: use no case para coletar evidencia, aplicar a pratica ou validar resultado.
-- pods: use no case para coletar evidencia, aplicar a pratica ou validar resultado.
-- deployments: use no case para coletar evidencia, aplicar a pratica ou validar resultado.
-- services: use no case para coletar evidencia, aplicar a pratica ou validar resultado.
-- configmaps: use no case para coletar evidencia, aplicar a pratica ou validar resultado.
-- probes: use no case para coletar evidencia, aplicar a pratica ou validar resultado.
-- ingress: use no case para coletar evidencia, aplicar a pratica ou validar resultado.
+## Como executar
 
-    ## Como executar
+Requisitos locais:
 
-    Requisitos locais:
+- Docker Engine ou Docker Desktop.
+- Docker Compose v2.
+- Git para clonar o repositorio e registrar alteracoes locais quando necessario.
 
-    - Docker
-    - Docker Compose
-    - Git, quando o laboratorio envolver versionamento
+Passos iniciais:
 
-    Passos:
+```bash
+git clone https://github.com/blcsilva/skillplatform-devops-sre-labs.git
+cd skillplatform-devops-sre-labs/labs/devops-entrega-automacao/kubernetes-fundamentos
+docker compose up -d --build
+docker compose ps
+```
 
-            ```bash
-        docker compose up -d
-        curl http://127.0.0.1:8080/health
-        docker compose logs app
-        docker compose exec lab bash -lc 'ls -lah /workspace/k8s && cat /workspace/k8s/deployment.yaml'
-        ```
+## Roteiro pratico
+
+Execute o roteiro abaixo e registre a saida relevante. Ajuste comandos somente quando o sistema operacional do host exigir.
+
+```bash
+docker compose up -d --build
+docker compose ps
+mkdir -p workspace/evidencias
+docker compose logs --tail=60 | tee workspace/evidencias/compose-logs.txt
+find . -maxdepth 3 -type f \( -name "Dockerfile" -o -name "*.yaml" \) | sort | tee workspace/evidencias/manifests.txt
+```
+
+Durante a pratica:
+
+- Leia o Dockerfile e identifique base image, pacotes instalados e comando principal.
+- Relacione porta exposta, health check e dependencias entre servicos.
+- Compare o compose local com o manifesto Kubernetes quando existir.
+
+## Entrega esperada
+
+- resumo da imagem/container
+- evidencia de execucao
+- risco operacional e melhoria proposta
+- Uma explicacao curta, em linguagem operacional, respondendo: o que aconteceu, como foi comprovado e qual seria a proxima acao segura.
+
+## Validacao
+
+No Linux, macOS, Git Bash ou WSL:
+
+```bash
+./scripts/validate.sh
+```
 
 
-    ## Entrega esperada
+Se a validacao falhar, leia a mensagem de erro, revise os arquivos em `workspace/evidencias/` e repita apenas a etapa necessaria.
 
-    Entrega esperada:
+## Referencias oficiais
 
-1. Sequencia de comandos, consultas ou configuracoes usadas.
-2. Evidencias antes/depois.
-3. Explicacao do motivo de cada acao.
-4. Uma decisao segura para seguir, reverter ou escalar.
+- [Dockerfile reference](https://docs.docker.com/reference/dockerfile/)
+- [Docker Compose documentation](https://docs.docker.com/compose/)
+- [Kubernetes documentation](https://kubernetes.io/docs/home/)
+- [kubectl reference](https://kubernetes.io/docs/reference/kubectl/)
 
-Criterio de conclusao: diagnosticar CrashLoopBackOff, erro de service e falha de probe.
+## Limpeza do ambiente
 
-    ## Validacao
+```bash
+docker compose down -v
+```
 
-    Execute no Linux, macOS, Git Bash ou WSL:
+## Cuidados
 
-    ```bash
-    ./scripts/validate.sh
-    ```
-
-    No PowerShell:
-
-    ```powershell
-    .\scriptsalidate.ps1
-    ```
-
-    ## Cuidados
-
-    - Nao use senhas reais.
-    - Nao coloque tokens pessoais nos arquivos.
-    - Use apenas dados ficticios do laboratorio.
-    - Remova containers ao terminar: `docker compose down -v`.
+- Nao use senhas, tokens ou chaves reais.
+- Nao publique arquivos `.env`, `.pem`, `.key` ou credenciais pessoais.
+- Trate este laboratorio como simulacao educacional, nao como ambiente de producao.

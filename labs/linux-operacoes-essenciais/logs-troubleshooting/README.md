@@ -1,80 +1,110 @@
 # Logs e troubleshooting operacional
 
-    Curso: Linux para operacoes de tecnologia
+Curso: **Linux para operacoes de tecnologia**
+Categoria: **Observabilidade**
 
-    ## Objetivo
+## Proposta de ensino
 
-    Objetivo: transformar logs em evidencia tecnica.
-Conteudo: journalctl, /var/log, rotacao de logs, timestamps, correlacao e severidade.
-Pratica: reconstruir a linha do tempo de uma indisponibilidade simples.
-Criterio de conclusao: escrever uma analise curta com causa provavel, impacto e proxima verificacao.
+Coletar sinais de observabilidade e transformar metricas, logs e sintomas em uma hipotese operacional.
 
-    ## Imagem e recursos
+Ao concluir, o aluno deve conseguir explicar o que verificou, quais evidencias coletou e qual acao operacional seria segura em um ambiente real.
 
-    Este laboratorio usa Docker Compose e imagens publicas sem senhas ou secrets.
+## Conceitos trabalhados
 
-    - Base Linux: `ubuntu:24.04`
-    - Servicos auxiliares conforme o topico: Nginx, Python demo app, Prometheus ou arquivos de IaC.
-    - Todos os dados sao ficticios e servem apenas para pratica.
+- logs
+- metricas
+- Prometheus
+- labels
+- alertas
+- sintomas
+- evidencias
 
-    ## Case
+## Ambiente do laboratorio
 
-    Case: aplicacao pratica de "Logs e troubleshooting operacional".
+- Execucao local com Docker Compose.
+- Servicos principais: `lab`, `demo-app`, `prometheus`.
+- Dados e logs sao ficticios; nao use credenciais reais.
+- Evidencias devem ser salvas em `workspace/evidencias/` ou `/workspace/evidencias/`, conforme o container usado.
 
-Contexto: voce recebeu uma demanda de operacao em ambiente de homologacao. O objetivo nao e apenas explicar o conceito, mas executar uma sequencia segura de analise, registrar evidencias e propor uma acao tecnicamente defensavel.
+Artefatos disponiveis:
 
-Objetivo pratico: transformar logs em evidencia tecnica.
+- `Dockerfile`
+- `compose.yaml`
+- `lab.yaml`
+- `app/`
+- `prometheus/`
+- `workspace/`
+- `scripts/`
 
-Ferramentas/conceitos que devem aparecer na resolucao:
-- ps: use no case para coletar evidencia, aplicar a pratica ou validar resultado.
-- journalctl: use no case para coletar evidencia, aplicar a pratica ou validar resultado.
+## Como executar
 
-    ## Como executar
+Requisitos locais:
 
-    Requisitos locais:
+- Docker Engine ou Docker Desktop.
+- Docker Compose v2.
+- Git para clonar o repositorio e registrar alteracoes locais quando necessario.
 
-    - Docker
-    - Docker Compose
-    - Git, quando o laboratorio envolver versionamento
+Passos iniciais:
 
-    Passos:
+```bash
+git clone https://github.com/blcsilva/skillplatform-devops-sre-labs.git
+cd skillplatform-devops-sre-labs/labs/linux-operacoes-essenciais/logs-troubleshooting
+docker compose up -d --build
+docker compose ps
+```
 
-            ```bash
-        docker compose up -d --build
-        curl http://127.0.0.1:8088/metrics
-        # Abra http://127.0.0.1:9090 e consulte demo_http_requests_total
-        docker compose logs demo-app > workspace/evidencias/demo-app.log
-        ```
+## Roteiro pratico
+
+Execute o roteiro abaixo e registre a saida relevante. Ajuste comandos somente quando o sistema operacional do host exigir.
+
+```bash
+docker compose up -d --build
+docker compose ps
+docker compose logs --tail=80
+mkdir -p workspace/evidencias
+curl -s http://localhost:9090/-/ready | tee workspace/evidencias/prometheus-ready.txt
+curl -s http://localhost:8000/metrics | head -40 | tee workspace/evidencias/metrics-sample.txt
+```
+
+Durante a pratica:
+
+- Identifique qual sinal mostra o sintoma primeiro: log, metrica ou resposta HTTP.
+- Diferencie erro pontual de tendencia recorrente.
+- Proponha um alerta acionavel com causa provavel, impacto e acao esperada.
+
+## Entrega esperada
+
+- amostra de metrica ou log
+- hipotese operacional
+- proposta de alerta ou dashboard minimo
+- Uma explicacao curta, em linguagem operacional, respondendo: o que aconteceu, como foi comprovado e qual seria a proxima acao segura.
+
+## Validacao
+
+No Linux, macOS, Git Bash ou WSL:
+
+```bash
+./scripts/validate.sh
+```
 
 
-    ## Entrega esperada
+Se a validacao falhar, leia a mensagem de erro, revise os arquivos em `workspace/evidencias/` e repita apenas a etapa necessaria.
 
-    Entrega esperada:
+## Referencias oficiais
 
-1. Sequencia de comandos, consultas ou configuracoes usadas.
-2. Evidencias antes/depois.
-3. Explicacao do motivo de cada acao.
-4. Uma decisao segura para seguir, reverter ou escalar.
+- [Prometheus documentation](https://prometheus.io/docs/introduction/overview/)
+- [Prometheus querying basics](https://prometheus.io/docs/prometheus/latest/querying/basics/)
+- [OpenTelemetry documentation](https://opentelemetry.io/docs/)
+- [Grafana documentation](https://grafana.com/docs/grafana/latest/)
 
-Criterio de conclusao: escrever uma analise curta com causa provavel, impacto e proxima verificacao.
+## Limpeza do ambiente
 
-    ## Validacao
+```bash
+docker compose down -v
+```
 
-    Execute no Linux, macOS, Git Bash ou WSL:
+## Cuidados
 
-    ```bash
-    ./scripts/validate.sh
-    ```
-
-    No PowerShell:
-
-    ```powershell
-    .\scriptsalidate.ps1
-    ```
-
-    ## Cuidados
-
-    - Nao use senhas reais.
-    - Nao coloque tokens pessoais nos arquivos.
-    - Use apenas dados ficticios do laboratorio.
-    - Remova containers ao terminar: `docker compose down -v`.
+- Nao use senhas, tokens ou chaves reais.
+- Nao publique arquivos `.env`, `.pem`, `.key` ou credenciais pessoais.
+- Trate este laboratorio como simulacao educacional, nao como ambiente de producao.

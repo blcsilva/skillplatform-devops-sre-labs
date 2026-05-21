@@ -1,85 +1,110 @@
 # Processos, systemd e servicos
 
-    Curso: Linux para operacoes de tecnologia
+Curso: **Linux para operacoes de tecnologia**
+Categoria: **Sistemas operacionais**
 
-    ## Objetivo
+## Proposta de ensino
 
-    Objetivo: entender ciclo de vida de processos e servicos Linux.
-Conteudo: ps, top, htop, kill, journalctl, systemctl, units e timers.
-Pratica: investigar um servico com falha e registrar hipoteses a partir do journal.
-Criterio de conclusao: reiniciar, habilitar e diagnosticar um servico com seguranca.
+Praticar rotinas Linux usadas em suporte, operacao, troubleshooting e automacao inicial.
 
-    ## Imagem e recursos
+Ao concluir, o aluno deve conseguir explicar o que verificou, quais evidencias coletou e qual acao operacional seria segura em um ambiente real.
 
-    Este laboratorio usa Docker Compose e imagens publicas sem senhas ou secrets.
+## Conceitos trabalhados
 
-    - Base Linux: `ubuntu:24.04`
-    - Servicos auxiliares conforme o topico: Nginx, Python demo app, Prometheus ou arquivos de IaC.
-    - Todos os dados sao ficticios e servem apenas para pratica.
+- navegacao no filesystem
+- leitura e filtragem de arquivos
+- permissoes
+- processos
+- servicos
+- evidencias operacionais
 
-    ## Case
+## Ambiente do laboratorio
 
-    Case: aplicacao pratica de "Processos, systemd e servicos".
+- Execucao local com Docker Compose.
+- Servicos principais: `linux`.
+- Dados e logs sao ficticios; nao use credenciais reais.
+- Evidencias devem ser salvas em `workspace/evidencias/` ou `/workspace/evidencias/`, conforme o container usado.
 
-Contexto: voce recebeu uma demanda de operacao em ambiente de homologacao. O objetivo nao e apenas explicar o conceito, mas executar uma sequencia segura de analise, registrar evidencias e propor uma acao tecnicamente defensavel.
+Artefatos disponiveis:
 
-Objetivo pratico: entender ciclo de vida de processos e servicos Linux.
+- `Dockerfile`
+- `compose.yaml`
+- `lab.yaml`
+- `workspace/`
+- `scripts/`
 
-Ferramentas/conceitos que devem aparecer na resolucao:
-- ps: use no case para coletar evidencia, aplicar a pratica ou validar resultado.
-- top: use no case para coletar evidencia, aplicar a pratica ou validar resultado.
-- htop: use no case para coletar evidencia, aplicar a pratica ou validar resultado.
-- kill: use no case para coletar evidencia, aplicar a pratica ou validar resultado.
-- journalctl: use no case para coletar evidencia, aplicar a pratica ou validar resultado.
-- systemctl: use no case para coletar evidencia, aplicar a pratica ou validar resultado.
+## Como executar
 
-    ## Como executar
+Requisitos locais:
 
-    Requisitos locais:
+- Docker Engine ou Docker Desktop.
+- Docker Compose v2.
+- Git para clonar o repositorio e registrar alteracoes locais quando necessario.
 
-    - Docker
-    - Docker Compose
-    - Git, quando o laboratorio envolver versionamento
+Passos iniciais:
 
-    Passos:
+```bash
+git clone https://github.com/blcsilva/skillplatform-devops-sre-labs.git
+cd skillplatform-devops-sre-labs/labs/linux-operacoes-essenciais/processos-systemd-servicos
+docker compose up -d --build
+docker compose ps
+```
 
-        ```bash
-    docker compose up -d --build
-    docker compose exec linux bash
-    cd /workspace
-    mkdir -p evidencias
-    date -Iseconds > evidencias/inicio.txt
-    ```
+## Roteiro pratico
+
+Execute o roteiro abaixo e registre a saida relevante. Ajuste comandos somente quando o sistema operacional do host exigir.
+
+```bash
+docker compose up -d --build
+docker compose exec linux bash
+cd /workspace
+mkdir -p evidencias
+pwd && ls -lah
+find . -maxdepth 3 -type f | sort
+date -Iseconds > evidencias/inicio.txt
+```
+
+Durante a pratica:
+
+- Mapeie arquivos, diretorios e dados disponiveis antes de executar alteracoes.
+- Use comandos pequenos e encadeados com pipe para chegar a uma conclusao reproduzivel.
+- Salve evidencias em workspace/evidencias com nome claro e data quando fizer sentido.
+
+## Entrega esperada
+
+- evidencias/inicio.txt
+- um arquivo com comandos executados
+- uma conclusao tecnica curta com hipotese e proxima acao segura
+- Uma explicacao curta, em linguagem operacional, respondendo: o que aconteceu, como foi comprovado e qual seria a proxima acao segura.
+
+## Validacao
+
+No Linux, macOS, Git Bash ou WSL:
+
+```bash
+./scripts/validate.sh
+```
 
 
-    ## Entrega esperada
+Se a validacao falhar, leia a mensagem de erro, revise os arquivos em `workspace/evidencias/` e repita apenas a etapa necessaria.
 
-    Entrega esperada:
+## Referencias oficiais
 
-1. Sequencia de comandos, consultas ou configuracoes usadas.
-2. Evidencias antes/depois.
-3. Explicacao do motivo de cada acao.
-4. Uma decisao segura para seguir, reverter ou escalar.
+- [Linux man-pages](https://man7.org/linux/man-pages/)
+- [GNU Coreutils manual](https://www.gnu.org/software/coreutils/manual/coreutils.html)
+- [GNU grep manual](https://www.gnu.org/software/grep/manual/grep.html)
+- [GNU sed manual](https://www.gnu.org/software/sed/manual/sed.html)
+- [GNU awk manual](https://www.gnu.org/software/gawk/manual/gawk.html)
+- [systemd documentation](https://systemd.io/)
 
-Criterio de conclusao: reiniciar, habilitar e diagnosticar um servico com seguranca.
+## Limpeza do ambiente
 
-    ## Validacao
+```bash
+docker compose down -v
+```
 
-    Execute no Linux, macOS, Git Bash ou WSL:
+## Cuidados
 
-    ```bash
-    ./scripts/validate.sh
-    ```
-
-    No PowerShell:
-
-    ```powershell
-    .\scriptsalidate.ps1
-    ```
-
-    ## Cuidados
-
-    - Nao use senhas reais.
-    - Nao coloque tokens pessoais nos arquivos.
-    - Use apenas dados ficticios do laboratorio.
-    - Remova containers ao terminar: `docker compose down -v`.
+- Nao use senhas, tokens ou chaves reais.
+- Nao publique arquivos `.env`, `.pem`, `.key` ou credenciais pessoais.
+- Trate este laboratorio como simulacao educacional, nao como ambiente de producao.

@@ -1,87 +1,111 @@
 # Redes no Linux para troubleshooting
 
-    Curso: Linux para operacoes de tecnologia
+Curso: **Linux para operacoes de tecnologia**
+Categoria: **Redes e protocolos**
 
-    ## Objetivo
+## Proposta de ensino
 
-    Objetivo: diagnosticar conectividade de forma ordenada.
-Conteudo: ip, ss, curl, dig, traceroute, tcpdump, DNS, portas e rotas.
-Pratica: identificar se uma falha esta em DNS, rota, firewall ou servico.
-Criterio de conclusao: produzir um checklist de debug de rede em cinco passos.
+Diagnosticar conectividade, DNS, HTTP e comportamento de servicos usando ferramentas simples e evidencias.
 
-    ## Imagem e recursos
+Ao concluir, o aluno deve conseguir explicar o que verificou, quais evidencias coletou e qual acao operacional seria segura em um ambiente real.
 
-    Este laboratorio usa Docker Compose e imagens publicas sem senhas ou secrets.
+## Conceitos trabalhados
 
-    - Base Linux: `ubuntu:24.04`
-    - Servicos auxiliares conforme o topico: Nginx, Python demo app, Prometheus ou arquivos de IaC.
-    - Todos os dados sao ficticios e servem apenas para pratica.
+- DNS
+- HTTP
+- portas TCP
+- rotas
+- resolucao de nomes
+- logs de acesso
+- testes com curl
 
-    ## Case
+## Ambiente do laboratorio
 
-    Case: aplicacao pratica de "Redes no Linux para troubleshooting".
+- Execucao local com Docker Compose.
+- Servicos principais: `web`, `client`.
+- Dados e logs sao ficticios; nao use credenciais reais.
+- Evidencias devem ser salvas em `workspace/evidencias/` ou `/workspace/evidencias/`, conforme o container usado.
 
-Contexto: voce recebeu uma demanda de operacao em ambiente de homologacao. O objetivo nao e apenas explicar o conceito, mas executar uma sequencia segura de analise, registrar evidencias e propor uma acao tecnicamente defensavel.
+Artefatos disponiveis:
 
-Objetivo pratico: diagnosticar conectividade de forma ordenada.
+- `Dockerfile`
+- `compose.yaml`
+- `lab.yaml`
+- `app/`
+- `k8s/`
+- `workspace/`
+- `scripts/`
 
-Ferramentas/conceitos que devem aparecer na resolucao:
-- ip: use no case para coletar evidencia, aplicar a pratica ou validar resultado.
-- ss: use no case para coletar evidencia, aplicar a pratica ou validar resultado.
-- curl: use no case para coletar evidencia, aplicar a pratica ou validar resultado.
-- dig: use no case para coletar evidencia, aplicar a pratica ou validar resultado.
-- traceroute: use no case para coletar evidencia, aplicar a pratica ou validar resultado.
-- tcpdump: use no case para coletar evidencia, aplicar a pratica ou validar resultado.
+## Como executar
 
-    ## Como executar
+Requisitos locais:
 
-    Requisitos locais:
+- Docker Engine ou Docker Desktop.
+- Docker Compose v2.
+- Git para clonar o repositorio e registrar alteracoes locais quando necessario.
 
-    - Docker
-    - Docker Compose
-    - Git, quando o laboratorio envolver versionamento
+Passos iniciais:
 
-    Passos:
+```bash
+git clone https://github.com/blcsilva/skillplatform-devops-sre-labs.git
+cd skillplatform-devops-sre-labs/labs/linux-operacoes-essenciais/redes-linux-debug
+docker compose up -d --build
+docker compose ps
+```
 
-            ```bash
-        docker compose up -d --build
-        docker compose exec client bash
-        curl -i http://web/health
-        dig web
-        ss -tulpn
-        traceroute web || true
-        tcpdump -c 5 -nn host web
-        ```
+## Roteiro pratico
+
+Execute o roteiro abaixo e registre a saida relevante. Ajuste comandos somente quando o sistema operacional do host exigir.
+
+```bash
+docker compose up -d --build
+docker compose exec client sh
+cd /workspace
+mkdir -p evidencias
+getent hosts web | tee evidencias/dns.txt
+curl -I http://web | tee evidencias/http-head.txt
+wget -qO- http://web | tee evidencias/http-body.txt
+```
+
+Durante a pratica:
+
+- Separe falha de DNS, falha de rota, falha de porta e falha da aplicacao.
+- Registre cada teste com comando e saida relevante.
+- Explique qual camada voce validou antes de seguir para a proxima.
+
+## Entrega esperada
+
+- evidencias/dns.txt
+- evidencias/http-head.txt
+- diagnostico com camada afetada e justificativa
+- Uma explicacao curta, em linguagem operacional, respondendo: o que aconteceu, como foi comprovado e qual seria a proxima acao segura.
+
+## Validacao
+
+No Linux, macOS, Git Bash ou WSL:
+
+```bash
+./scripts/validate.sh
+```
 
 
-    ## Entrega esperada
+Se a validacao falhar, leia a mensagem de erro, revise os arquivos em `workspace/evidencias/` e repita apenas a etapa necessaria.
 
-    Entrega esperada:
+## Referencias oficiais
 
-1. Sequencia de comandos, consultas ou configuracoes usadas.
-2. Evidencias antes/depois.
-3. Explicacao do motivo de cada acao.
-4. Uma decisao segura para seguir, reverter ou escalar.
+- [curl documentation](https://curl.se/docs/)
+- [nginx documentation](https://nginx.org/en/docs/)
+- [Docker Compose networking](https://docs.docker.com/compose/how-tos/networking/)
+- [Kubernetes Services, Load Balancing, and Networking](https://kubernetes.io/docs/concepts/services-networking/)
 
-Criterio de conclusao: produzir um checklist de debug de rede em cinco passos.
+## Limpeza do ambiente
 
-    ## Validacao
+```bash
+docker compose down -v
+```
 
-    Execute no Linux, macOS, Git Bash ou WSL:
+## Cuidados
 
-    ```bash
-    ./scripts/validate.sh
-    ```
-
-    No PowerShell:
-
-    ```powershell
-    .\scriptsalidate.ps1
-    ```
-
-    ## Cuidados
-
-    - Nao use senhas reais.
-    - Nao coloque tokens pessoais nos arquivos.
-    - Use apenas dados ficticios do laboratorio.
-    - Remova containers ao terminar: `docker compose down -v`.
+- Nao use senhas, tokens ou chaves reais.
+- Nao publique arquivos `.env`, `.pem`, `.key` ou credenciais pessoais.
+- Trate este laboratorio como simulacao educacional, nao como ambiente de producao.

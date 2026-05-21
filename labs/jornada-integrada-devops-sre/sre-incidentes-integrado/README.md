@@ -1,84 +1,108 @@
 # SRE e resposta a incidentes
 
-    Curso: Jornada integrada DevOps e SRE
+Curso: **Jornada integrada DevOps e SRE**
+Categoria: **Confiabilidade e SRE**
 
-    ## Objetivo
+## Proposta de ensino
 
-    Objetivo: coordenar incidente, reduzir impacto e transformar falha em melhoria.
-Conteudo: SLI, SLO, error budget, runbook, comunicacao, postmortem e toil.
-Pratica: preencher uma timeline de incidente e propor acoes corretivas.
-Criterio de conclusao: registrar impacto, mitigacao, causa provavel e aprendizado.
+Praticar decisoes de confiabilidade: impacto, SLI/SLO, resposta a incidente, postmortem e melhoria continua.
 
-    ## Imagem e recursos
+Ao concluir, o aluno deve conseguir explicar o que verificou, quais evidencias coletou e qual acao operacional seria segura em um ambiente real.
 
-    Este laboratorio usa Docker Compose e imagens publicas sem senhas ou secrets.
+## Conceitos trabalhados
 
-    - Base Linux: `ubuntu:24.04`
-    - Servicos auxiliares conforme o topico: Nginx, Python demo app, Prometheus ou arquivos de IaC.
-    - Todos os dados sao ficticios e servem apenas para pratica.
+- SLI
+- SLO
+- error budget
+- burn rate
+- incidente
+- postmortem
+- toil
 
-    ## Case
+## Ambiente do laboratorio
 
-    Case: aplicacao pratica de "SRE e resposta a incidentes".
+- Execucao local com Docker Compose.
+- Servicos principais: `linux`.
+- Dados e logs sao ficticios; nao use credenciais reais.
+- Evidencias devem ser salvas em `workspace/evidencias/` ou `/workspace/evidencias/`, conforme o container usado.
 
-Contexto: voce recebeu uma demanda de operacao em ambiente de homologacao. O objetivo nao e apenas explicar o conceito, mas executar uma sequencia segura de analise, registrar evidencias e propor uma acao tecnicamente defensavel.
+Artefatos disponiveis:
 
-Objetivo pratico: coordenar incidente, reduzir impacto e transformar falha em melhoria.
+- `Dockerfile`
+- `compose.yaml`
+- `lab.yaml`
+- `workspace/`
+- `scripts/`
 
-Ferramentas/conceitos que devem aparecer na resolucao:
-- SLI: use no case para coletar evidencia, aplicar a pratica ou validar resultado.
-- SLO: use no case para coletar evidencia, aplicar a pratica ou validar resultado.
-- runbook: use no case para coletar evidencia, aplicar a pratica ou validar resultado.
-- postmortem: use no case para coletar evidencia, aplicar a pratica ou validar resultado.
-- toil: use no case para coletar evidencia, aplicar a pratica ou validar resultado.
+## Como executar
 
-    ## Como executar
+Requisitos locais:
 
-    Requisitos locais:
+- Docker Engine ou Docker Desktop.
+- Docker Compose v2.
+- Git para clonar o repositorio e registrar alteracoes locais quando necessario.
 
-    - Docker
-    - Docker Compose
-    - Git, quando o laboratorio envolver versionamento
+Passos iniciais:
 
-    Passos:
+```bash
+git clone https://github.com/blcsilva/skillplatform-devops-sre-labs.git
+cd skillplatform-devops-sre-labs/labs/jornada-integrada-devops-sre/sre-incidentes-integrado
+docker compose up -d --build
+docker compose ps
+```
 
-        ```bash
-    docker compose up -d --build
-    docker compose exec linux bash
-    cd /workspace
-    mkdir -p evidencias
-    date -Iseconds > evidencias/inicio.txt
-    ```
+## Roteiro pratico
+
+Execute o roteiro abaixo e registre a saida relevante. Ajuste comandos somente quando o sistema operacional do host exigir.
+
+```bash
+docker compose up -d --build
+docker compose exec linux bash
+cd /workspace
+mkdir -p evidencias
+date -Iseconds > evidencias/inicio.txt
+printf "impacto=\nhipotese=\nacao=\n" > evidencias/analise-incidente.txt
+```
+
+Durante a pratica:
+
+- Defina o impacto do ponto de vista do usuario antes de propor correcao.
+- Relacione cada acao a uma evidencia observavel.
+- Registre o que e mitigacao imediata e o que e prevencao futura.
+
+## Entrega esperada
+
+- analise de impacto
+- acao de mitigacao com criterio de sucesso
+- item de melhoria para reduzir recorrencia
+- Uma explicacao curta, em linguagem operacional, respondendo: o que aconteceu, como foi comprovado e qual seria a proxima acao segura.
+
+## Validacao
+
+No Linux, macOS, Git Bash ou WSL:
+
+```bash
+./scripts/validate.sh
+```
 
 
-    ## Entrega esperada
+Se a validacao falhar, leia a mensagem de erro, revise os arquivos em `workspace/evidencias/` e repita apenas a etapa necessaria.
 
-    Entrega esperada:
+## Referencias oficiais
 
-1. Sequencia de comandos, consultas ou configuracoes usadas.
-2. Evidencias antes/depois.
-3. Explicacao do motivo de cada acao.
-4. Uma decisao segura para seguir, reverter ou escalar.
+- [Google SRE Book](https://sre.google/sre-book/table-of-contents/)
+- [Google SRE Workbook](https://sre.google/workbook/table-of-contents/)
+- [Alerting on SLOs](https://sre.google/workbook/alerting-on-slos/)
+- [Incident Response from Google SRE](https://sre.google/sre-book/managing-incidents/)
 
-Criterio de conclusao: registrar impacto, mitigacao, causa provavel e aprendizado.
+## Limpeza do ambiente
 
-    ## Validacao
+```bash
+docker compose down -v
+```
 
-    Execute no Linux, macOS, Git Bash ou WSL:
+## Cuidados
 
-    ```bash
-    ./scripts/validate.sh
-    ```
-
-    No PowerShell:
-
-    ```powershell
-    .\scriptsalidate.ps1
-    ```
-
-    ## Cuidados
-
-    - Nao use senhas reais.
-    - Nao coloque tokens pessoais nos arquivos.
-    - Use apenas dados ficticios do laboratorio.
-    - Remova containers ao terminar: `docker compose down -v`.
+- Nao use senhas, tokens ou chaves reais.
+- Nao publique arquivos `.env`, `.pem`, `.key` ou credenciais pessoais.
+- Trate este laboratorio como simulacao educacional, nao como ambiente de producao.

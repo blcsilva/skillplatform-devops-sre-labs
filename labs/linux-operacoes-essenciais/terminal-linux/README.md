@@ -1,101 +1,114 @@
 # Terminal Linux e navegacao produtiva
 
-    Curso: Linux para operacoes de tecnologia
+Curso: **Linux para operacoes de tecnologia**
+Categoria: **Sistemas operacionais**
 
-    ## Objetivo
+## Proposta de ensino
 
-    Objetivo: dominar navegacao, leitura de arquivos, pipes e redirecionamentos.
-Conteudo: pwd, ls, cd, find, grep, awk, sed, less, head, tail e xargs.
-Pratica: localizar logs recentes, filtrar erros e montar um comando reutilizavel.
-Criterio de conclusao: explicar quando usar pipe, redirect e subshell em uma rotina operacional.
+Praticar rotinas Linux usadas em suporte, operacao, troubleshooting e automacao inicial.
 
-    ## Imagem e recursos
+Ao concluir, o aluno deve conseguir explicar o que verificou, quais evidencias coletou e qual acao operacional seria segura em um ambiente real.
 
-    Este laboratorio usa Docker Compose e imagens publicas sem senhas ou secrets.
+## Conceitos trabalhados
 
-    - Base Linux: `ubuntu:24.04`
-    - Servicos auxiliares conforme o topico: Nginx, Python demo app, Prometheus ou arquivos de IaC.
-    - Todos os dados sao ficticios e servem apenas para pratica.
+- navegacao no filesystem
+- leitura e filtragem de arquivos
+- permissoes
+- processos
+- servicos
+- evidencias operacionais
 
-    ## Case
+## Ambiente do laboratorio
 
-    Case: triagem de logs de uma aplicacao Linux.
+- Execucao local com Docker Compose.
+- Servicos principais: `linux`.
+- Dados e logs sao ficticios; nao use credenciais reais.
+- Evidencias devem ser salvas em `workspace/evidencias/` ou `/workspace/evidencias/`, conforme o container usado.
 
-Contexto: o time de suporte informou que a aplicacao web apresentou erros intermitentes entre 10:00 e 10:20. Voce recebeu um diretorio de evidencias em /var/log/app ou, em laboratorio local, uma pasta ./logs com arquivos access.log, app.log e app.log.1.
+Artefatos disponiveis:
 
-Objetivo pratico: navegar pelo sistema de arquivos, localizar logs recentes, filtrar erros, extrair campos uteis e montar um comando reutilizavel sem alterar os arquivos originais.
+- `Dockerfile`
+- `compose.yaml`
+- `lab.yaml`
+- `workspace/`
+- `scripts/`
 
-Comandos que devem aparecer na resolucao:
-- pwd para confirmar o diretorio atual.
-- cd para entrar no diretorio de trabalho.
-- ls -lah para inspecionar arquivos, tamanhos e datas.
-- find para localizar logs alterados recentemente.
-- head e tail para amostrar inicio/fim dos arquivos.
-- less para leitura paginada sem carregar tudo de uma vez.
-- grep para filtrar ERROR, WARN, timeout, 5xx ou request-id.
-- awk para extrair colunas como timestamp, status code ou rota.
-- sed para mascarar dados sensiveis ou normalizar trechos.
-- xargs para aplicar uma acao sobre arquivos encontrados.
-- pipes para encadear leitura, filtro e transformacao.
-- redirects > e >> para salvar evidencias e relatorios.
-- subshell $(...) para gerar nomes de arquivos com data ou reaproveitar resultados.
+## Como executar
 
-    ## Como executar
+Requisitos locais:
 
-    Requisitos locais:
+- Docker Engine ou Docker Desktop.
+- Docker Compose v2.
+- Git para clonar o repositorio e registrar alteracoes locais quando necessario.
 
-    - Docker
-    - Docker Compose
-    - Git, quando o laboratorio envolver versionamento
+Passos iniciais:
 
-    Passos:
+```bash
+git clone https://github.com/blcsilva/skillplatform-devops-sre-labs.git
+cd skillplatform-devops-sre-labs/labs/linux-operacoes-essenciais/terminal-linux
+docker compose up -d --build
+docker compose ps
+```
 
-            ```bash
-        docker compose up -d --build
-        docker compose exec linux bash
-        cd /workspace/logs
-        pwd
-        ls -lahtr
-        mkdir -p ../evidencias
-        find . -type f -name "*.log*" -mtime -1 -print
-        head -n 20 app.log
-        tail -n 50 app.log
-        grep -Ein -e error -e warn -e timeout -e failed -e " 5[0-9]{2} " app.log
-        awk '{print $1, $3, $4, $5}' app.log
-        sed -E 's/[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+/x.x.x.x/g' app.log > ../evidencias/app-anon.log
-        find . -type f -name "*.log*" -print0 | xargs -0 grep -Ein -e error -e timeout -e failed > ../evidencias/erros-$(date +%Y%m%d).txt
-        ```
+## Roteiro pratico
 
+Execute o roteiro abaixo e registre a saida relevante. Ajuste comandos somente quando o sistema operacional do host exigir.
 
-    ## Entrega esperada
+```bash
+docker compose up -d --build
+docker compose exec linux bash
+cd /workspace/logs
+mkdir -p ../evidencias
+pwd && ls -lah
+find . -type f -name "*.log*" -mtime -1 -print
+head -n 20 app.log
+tail -n 50 app.log
+grep -Ein -e error -e warn -e timeout -e failed -e " 5[0-9]{2} " app.log
+awk '{print $1, $3, $4, $5}' app.log
+sed -E 's/[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+/x.x.x.x/g' app.log > ../evidencias/app-anon.log
+find . -type f -name "*.log*" -print0 | xargs -0 grep -Ein -e error -e timeout -e failed > ../evidencias/erros-$(date +%Y%m%d).txt
+```
 
-    Entrega esperada:
+Durante a pratica:
 
-1. Arquivo evidencias/erros-AAAAMMDD.txt com linhas relevantes de erro.
-2. Um comando reutilizavel combinando find, grep, awk ou sed.
-3. Uma conclusao curta contendo:
-- periodo analisado;
-- arquivos inspecionados;
-- padroes encontrados;
-- hipotese tecnica;
-- proxima acao segura.
+- Mapeie arquivos, diretorios e dados disponiveis antes de executar alteracoes.
+- Use comandos pequenos e encadeados com pipe para chegar a uma conclusao reproduzivel.
+- Salve evidencias em workspace/evidencias com nome claro e data quando fizer sentido.
+- Explique quando usou pipe, redirect e subshell no comando final.
 
-Exemplo de conclusao:
-Entre 10:00 e 10:20, os erros se concentraram em app.log na rota /api/login com status 500 e mensagens timeout. A hipotese inicial e lentidao na dependencia de autenticacao. Proxima acao: comparar com metricas da dependencia e logs do servico de auth.
+## Entrega esperada
 
-Criterio de conclusao: explicar quando usar pipe, redirect e subshell em uma rotina operacional.
+- `workspace/evidencias/app-anon.log` com dados mascarados via `sed`.
+- `workspace/evidencias/erros-AAAAMMDD.txt` com linhas filtradas por `find`, `xargs` e `grep`.
+- um comando reutilizavel combinando `find`, `grep`, `awk`, `sed`, pipe, redirect e subshell.
+- uma conclusao tecnica curta com hipotese e proxima acao segura
+- Uma explicacao curta, em linguagem operacional, respondendo: o que aconteceu, como foi comprovado e qual seria a proxima acao segura.
 
-    ## Validacao
+## Validacao
 
-    Execute no Linux, macOS, Git Bash ou WSL:
+No Linux, macOS, Git Bash ou WSL:
 
-    ```bash
-    ./scripts/validate.sh
-    ```
-    
-    ## Cuidados
+```bash
+./scripts/validate.sh
+```
 
-    - Nao use senhas reais.
-    - Nao coloque tokens pessoais nos arquivos.
-    - Use apenas dados ficticios do laboratorio.
-    - Remova containers ao terminar: `docker compose down -v`.
+## Referencias oficiais
+
+- [Linux man-pages](https://man7.org/linux/man-pages/)
+- [GNU Coreutils manual](https://www.gnu.org/software/coreutils/manual/coreutils.html)
+- [GNU grep manual](https://www.gnu.org/software/grep/manual/grep.html)
+- [GNU sed manual](https://www.gnu.org/software/sed/manual/sed.html)
+- [GNU awk manual](https://www.gnu.org/software/gawk/manual/gawk.html)
+- [systemd documentation](https://systemd.io/)
+
+## Limpeza do ambiente
+
+```bash
+docker compose down -v
+```
+
+## Cuidados
+
+- Nao use senhas, tokens ou chaves reais.
+- Nao publique arquivos `.env`, `.pem`, `.key` ou credenciais pessoais.
+- Trate este laboratorio como simulacao educacional, nao como ambiente de producao.
